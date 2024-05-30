@@ -1,6 +1,4 @@
-export const config = {
-  maxDuration: 5,
-};
+export const maxDuration = 5; 
 
 export async function POST(request) {
   const data = await request.json()
