@@ -145,7 +145,6 @@ export const generatePersonalize = async (settings, setSettings) => {
       "use_expansion": true,
     },
   }
-  console.log("123", data)
   await generateImages(data, setSettings);
   updateSettings("isGenerating", false);
 }
