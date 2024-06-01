@@ -326,7 +326,7 @@ export default function Input({ feature, settings, setSettings, setFirstGen }) {
             (feature == "personalize" || feature == "imageToImage") && <Models models={models} model={model} updateSettings={updateSettings} />
           }
           <Prompt prompt={prompt} updateSettings={updateSettings} />
-          <PromptEnhancement useExpansion={useExpansion} updateSettings={updateSettings}/>
+          { (feature !== "goJourney") && <PromptEnhancement useExpansion={useExpansion} updateSettings={updateSettings}/>}
           {
             feature == "textToImage" && <Ratios ratio={ratio} updateSettings={updateSettings} />
           }

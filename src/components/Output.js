@@ -43,8 +43,8 @@ export default function Output({ settings }) {
   };
 
   return (
-    <div className="flex justify-center items-center w-full">
-      <div className="relative w-[100%] max-h-[95vh] overflow-y-auto">
+    <div className="flex justify-center items-center w-full  overflow-y-auto">
+      <div className="relative w-[100%] max-h-[95vh]">
         {isGenerating && (
           <div className="flex flex-col items-center justify-center">
             <span className="loading loading-dots loading-md"></span>

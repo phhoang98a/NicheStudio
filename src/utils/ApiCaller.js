@@ -310,15 +310,12 @@ export const generateGoJourney = async (settings, setSettings) => {
   updateSettings("generatedImage", [])
   updateSettings("status", "")
 
-  const { prompt, seed, useExpansion } = settings;
+  const { prompt, seed } = settings;
   const data = {
     "key": API_TOKEN,
     "prompt": prompt,
     "model_name": "GoJourney",
     "seed": parseInt(seed)>=0?parseInt(seed):getRandomInt(0, 1e9),
-    "pipeline_params": {
-      "use_expansion": useExpansion,
-    },
   }
 
   let output = await fetch("/api/generate", {
