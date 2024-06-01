@@ -8,7 +8,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { MdZoomInMap, MdZoomOutMap } from "react-icons/md";
 
 export default function Output({ settings }) {
-  const { isGenerating, generatedImage } = settings;
+  const { isGenerating, generatedImage, ratio } = settings;
   const [isZoomed, setIsZoomed] = useState(false);
   const [zoomedImage, setZoomedImage] = useState(null);
 
@@ -43,10 +43,10 @@ export default function Output({ settings }) {
   };
 
   return (
-    <div className="flex justify-center items-center w-full  overflow-y-auto">
-      <div className="relative w-[100%] max-h-[95vh]">
+    <div className="flex justify-center items-center w-full overflow-y-auto xl:overflow-y-hidden ">
+      <div className="relative max-h-[95vh]">
         {isGenerating && (
-          <div className="flex flex-col items-center justify-center">
+          <div className="flex flex-col items-center justify-center pb-1">
             <span className="loading loading-dots loading-md"></span>
             <p>Whipping up your words into art...</p>
           </div>
@@ -55,14 +55,14 @@ export default function Output({ settings }) {
           <Card>
             <CardBody >
               <div className="w-full">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-5">
+                <div className={`grid grid-cols-1 ${ ratio=="9:16" ? 'md:grid-cols-4' : 'md:grid-cols-2'} gap-4`}>
                   {generatedImage.map((image, index) => (
-                    <div key={index} className="lg:w-[300px] lg:h-[300px] xl:w-[400px] xl:h-[400px] monitor:h-[450px] relative group" style={{ marginLeft: "auto", marginRight: "auto" }}>
+                    <div key={index} className=" relative group w-full xl:w-auto xl:h-[400px] monitor:h-[450px]" style={{ marginLeft: "auto", marginRight: "auto" }}>
                       <Image
                         src={image}
                         alt={`Image ${index}`}
-                        width={200}
-                        height={200}
+                        width={400}
+                        height={400}
                         className="cursor-pointer object-cover w-full h-full"
                         onClick={() => handleZoom(image)}
                       />
@@ -97,8 +97,8 @@ export default function Output({ settings }) {
                     <Image
                       src={zoomedImage}
                       alt="Zoomed Image"
-                      width={650}
-                      height={650}
+                      width={ratio=="9:16"? 500 : 800}
+                      height={ratio=="9:16"? 500 : 800}
                       sizes="100vw"
                     />
                     <MdZoomInMap className="absolute top-0 right-0 m-4 bg-white rounded-3xl p-1 cursor-pointer" size={30} onClick={handleClose} />

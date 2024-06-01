@@ -31,3 +31,11 @@ body {
     text-wrap: balance;
   }
 }
+
+@media (max-height: 450px) {
+  .hide-on-small-height {
+    display: none !important;
+  }
+
+}
+

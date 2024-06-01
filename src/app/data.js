@@ -9,7 +9,7 @@ export const features = [
 
 export const styles = [
   { key: "3D", label: "3D" },
-  { key: "videoGame", label: "Video Game" },
+  { key: "video Game", label: "Video Game" },
   { key: "emoji", label: "Emoji" },
   { key: "pixels", label: "Pixels" },
   { key: "clay", label: "Clay" },

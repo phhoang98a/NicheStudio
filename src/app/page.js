@@ -50,7 +50,7 @@ export default function Home() {
             width={150}
             height={150}
             sizes="100vw"
-            className="hidden md:block absolute bottom-0 left-0 m-6"
+            className="hidden md:block absolute bottom-0 left-0 m-6 hide-on-small-height"
           />
         </div>
         {!firstGen &&

@@ -139,7 +139,7 @@ const Style = ({ style, updateSettings }) => {
       placeholder="Select a style"
       selectedKeys={[style]}
       style={{ backgroundColor: "white" }}
-      onSelectionChange={(keys) =>{ if (keys.currentKey) updateSettings("style", keys.currentKey)}}
+      onSelectionChange={(keys) => { if (keys.currentKey) updateSettings("style", keys.currentKey) }}
     >
       {styles.map((st) => (
         <SelectItem key={st.key} className="text-primary">
@@ -189,7 +189,7 @@ const Models = ({ models, model, updateSettings }) => {
       placeholder="Select a model"
       selectedKeys={[model]}
       style={{ backgroundColor: "white" }}
-      onSelectionChange={(keys) =>{ if (keys.currentKey) updateSettings("model", keys.currentKey)}}
+      onSelectionChange={(keys) => { if (keys.currentKey) updateSettings("model", keys.currentKey) }}
     >
       {models.map((md) => (
         <SelectItem key={md.key} className="text-primary">
@@ -200,14 +200,20 @@ const Models = ({ models, model, updateSettings }) => {
   )
 }
 
-const Ratios = ({ ratio, updateSettings }) => {
+const Ratios = ({ ratio, isGenerating, updateSettings, setFirstGen }) => {
   return (
     <Select
-      label="Style"
-      placeholder="Select a style"
+      label="Ratio"
+      isDisabled={isGenerating}
+      placeholder="Select a ratio"
       selectedKeys={[ratio]}
       style={{ backgroundColor: "white" }}
-      onSelectionChange={(keys) =>{if (keys.currentKey) updateSettings("ratio", keys.currentKey)}}
+      onSelectionChange={(keys) => {
+        if (keys.currentKey)
+          updateSettings("ratio", keys.currentKey)
+        setFirstGen(true)
+        updateSettings("generatedImage", [])
+      }}
     >
       {ratios.map((rt) => (
         <SelectItem key={rt.key} className="text-primary">
@@ -218,14 +224,14 @@ const Ratios = ({ ratio, updateSettings }) => {
   )
 }
 
-const PromptEnhancement = ({useExpansion, updateSettings})=> {
+const PromptEnhancement = ({ useExpansion, updateSettings }) => {
   return (
-    <Checkbox isSelected={useExpansion} onChange={(e)=>updateSettings("useExpansion", e.target.checked)} size="sm">Prompt Enhancement</Checkbox>
+    <Checkbox isSelected={useExpansion} onChange={(e) => updateSettings("useExpansion", e.target.checked)} size="sm">Prompt Enhancement</Checkbox>
   )
 }
 
 export default function Input({ feature, settings, setSettings, setFirstGen }) {
-  const { model, ratio, negativePrompt, uid, secretKey, seed, poseImage, image, ipScale,  promptStrength, controlScale, style, isGenerating, status, prompt,  useExpansion } = settings;
+  const { model, ratio, negativePrompt, uid, secretKey, seed, poseImage, image, ipScale, promptStrength, controlScale, style, isGenerating, status, prompt, useExpansion } = settings;
   const [error, setError] = useState("")
 
 
@@ -243,14 +249,14 @@ export default function Input({ feature, settings, setSettings, setFirstGen }) {
       setError("Please fill in Prompt field")
       return false
     }
-    if (feature == "faceToMany" || feature == "imageToImage" ) {
+    if (feature == "faceToMany" || feature == "imageToImage") {
       if (!image) {
         setError("Please upload an image")
         return false
       }
     }
 
-    if (feature=="personalize"){
+    if (feature == "personalize") {
       if (!image) {
         setError("Please upload an image that contains face")
         return false
@@ -326,9 +332,9 @@ export default function Input({ feature, settings, setSettings, setFirstGen }) {
             (feature == "personalize" || feature == "imageToImage") && <Models models={models} model={model} updateSettings={updateSettings} />
           }
           <Prompt prompt={prompt} updateSettings={updateSettings} />
-          { (feature !== "goJourney") && <PromptEnhancement useExpansion={useExpansion} updateSettings={updateSettings}/>}
+          {(feature !== "goJourney") && <PromptEnhancement useExpansion={useExpansion} updateSettings={updateSettings} />}
           {
-            feature == "textToImage" && <Ratios ratio={ratio} updateSettings={updateSettings} />
+            feature == "textToImage" && <Ratios ratio={ratio} isGenerating={isGenerating} updateSettings={updateSettings} setFirstGen={setFirstGen} />
           }
           {feature == "faceToMany" &&
             <>

@@ -275,6 +275,7 @@ export const generateFaceToMany = async (settings, setSettings) => {
   updateSettings("generatedImage", [])
   updateSettings("status", "")
 
+
   const { prompt, image, style, seed,useExpansion } = settings;
   const base64Image = image.base64String.split(",")[1]
   const data = {
@@ -286,7 +287,7 @@ export const generateFaceToMany = async (settings, setSettings) => {
     "pipeline_type": "img2img",
     "conditional_image": base64Image,
     "pipeline_params": { 
-      "style": style,
+      "style": capitalizeFirstLetter(style),
       "use_expansion": useExpansion,
     },
   }
