@@ -316,7 +316,7 @@ export default function Input({ feature, settings, setSettings, setFirstGen }) {
 
 
   return (
-    <Card className="overflow-y-auto max-h-[70vh]">
+    <Card className="overflow-y-auto max-h-[60vh]">
       <CardBody >
         <div className="flex flex-col gap-4">
           {
