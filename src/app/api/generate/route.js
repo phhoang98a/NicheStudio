@@ -14,5 +14,6 @@ export async function POST(request) {
     return Response.json(responseData);
   } catch (error) {
     console.error('Error:', error);
+    return Response.json({ error: 'An error occurred while generating the image' }, { status: 500 });
   }
 }

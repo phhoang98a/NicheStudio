@@ -1,7 +1,7 @@
 "use client"
 import Image from "next/image";
 import { useEffect, useState, useCallback, useRef } from "react";
-import { Select, SelectItem, Card, CardBody, Textarea, Accordion, AccordionItem, Slider, Button } from "@nextui-org/react";
+import { Select, SelectItem, Card, CardBody, Textarea, Accordion, AccordionItem, Slider, Button, Checkbox } from "@nextui-org/react";
 import { ratios, styles, goJourney, faceToMany, stickerMaker, textToImage, personalize, imageToImage, modelsT2I, models } from "../app/data";
 import { AiOutlineClose } from "react-icons/ai";
 import { generateFaceToMany, generateGoJourney, generateStickerMaker, generateTextToImage, generatePersonalize, generateImageToImage } from "@/utils/ApiCaller";
@@ -35,7 +35,8 @@ const Advanced = ({ uid, secretKey, seed, updateSettings }) => {
   )
 }
 
-const ScaleSlide = ({ scale, title, attribute, updateSettings }) => {
+
+const Slide = ({ scale, title, attribute, updateSettings }) => {
   const handleChange = (value) => {
     updateSettings(attribute, value)
   };
@@ -184,8 +185,8 @@ const NegativePrompt = ({ negativePrompt, updateSettings }) => {
 const Models = ({ models, model, updateSettings }) => {
   return (
     <Select
-      label="Style"
-      placeholder="Select a style"
+      label="Model"
+      placeholder="Select a model"
       selectedKeys={[model]}
       style={{ backgroundColor: "white" }}
       onSelectionChange={(keys) =>{ if (keys.currentKey) updateSettings("model", keys.currentKey)}}
@@ -217,8 +218,14 @@ const Ratios = ({ ratio, updateSettings }) => {
   )
 }
 
+const PromptEnhancement = ({useExpansion, updateSettings})=> {
+  return (
+    <Checkbox isSelected={useExpansion} onChange={(e)=>updateSettings("useExpansion", e.target.checked)} size="sm">Prompt Enhancement</Checkbox>
+  )
+}
+
 export default function Input({ feature, settings, setSettings, setFirstGen }) {
-  const { model, ratio, negativePrompt, uid, secretKey, seed, poseImage, image, ipScale, controlScale, style, isGenerating, status, prompt } = settings;
+  const { model, ratio, negativePrompt, uid, secretKey, seed, poseImage, image, ipScale,  promptStrength, controlScale, style, isGenerating, status, prompt,  useExpansion } = settings;
   const [error, setError] = useState("")
 
 
@@ -319,6 +326,7 @@ export default function Input({ feature, settings, setSettings, setFirstGen }) {
             (feature == "personalize" || feature == "imageToImage") && <Models models={models} model={model} updateSettings={updateSettings} />
           }
           <Prompt prompt={prompt} updateSettings={updateSettings} />
+          <PromptEnhancement useExpansion={useExpansion} updateSettings={updateSettings}/>
           {
             feature == "textToImage" && <Ratios ratio={ratio} updateSettings={updateSettings} />
           }
@@ -331,14 +339,15 @@ export default function Input({ feature, settings, setSettings, setFirstGen }) {
           {feature == "imageToImage" &&
             <>
               <ImageUpload image={image} title="Upload an image" attribute="image" updateSettings={updateSettings} />
+              <Slide scale={promptStrength} title="Strength of prompt" attribute="promptStrength" updateSettings={updateSettings} />
             </>
           }
           {feature == "personalize" &&
             <>
               <ImageUpload image={image} title="Upload your image that contains face" attribute="image" updateSettings={updateSettings} />
               <ImageUpload image={poseImage} title="Upload your image that contains pose" attribute="poseImage" updateSettings={updateSettings} />
-              <ScaleSlide scale={ipScale} title="IP Adapter Scale" attribute="ipScale" updateSettings={updateSettings} />
-              <ScaleSlide scale={controlScale} title="ControlNet Scale" attribute="controlScale" updateSettings={updateSettings} />
+              <Slide scale={ipScale} title="IP Adapter Scale" attribute="ipScale" updateSettings={updateSettings} />
+              <Slide scale={controlScale} title="ControlNet Scale" attribute="controlScale" updateSettings={updateSettings} />
             </>
           }
           {

@@ -16,7 +16,8 @@ module.exports = {
         primary: 'black',
       },
       screens: {
-        'custom': '820px', // Define your custom breakpoint
+        'custom': '820px',
+        "monitor": '1920px'
       }
     },
   },

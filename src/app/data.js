@@ -1,10 +1,10 @@
 export const features = [
-  { key: "goJourney", label: "GoJourney" },
+  { key: "textToImage", label: "Text To Image" },
   { key: "faceToMany", label: "FaceToMany" },
   { key: "stickerMaker", label: "StickerMaker" },
-  { key: "textToImage", label: "Text To Image" },
   { key: "personalize", label: "Personalize" },
   { key: "imageToImage", label: "Image To Image" },
+  { key: "goJourney", label: "GoJourney" },
 ];
 
 export const styles = [
@@ -52,6 +52,8 @@ export const goJourney = {
   controlScale: null,
   style: "",
   isGenerating: false,
+  promptStrength: null,
+  useExpansion: true,
   prompt: "an image of izuku midoriya wearing a dark green t - shirt and baseball cap being served by a robot maid with large technics arms, by Range Murata, Katsuhiro Otomo, Yoshitaka Amano, and Artgerm. 3D shadowing effect, 8K resolution. --ar 4:5 --v 6"
 };
 
@@ -70,6 +72,8 @@ export const faceToMany = {
   controlScale: null,
   style: "3D",
   isGenerating: false,
+  promptStrength: null,
+  useExpansion: true,
   prompt: "a person"
 };
 
@@ -88,6 +92,8 @@ export const stickerMaker = {
   controlScale: null,
   style: "",
   isGenerating: false,
+  promptStrength: null,
+  useExpansion: true,
   prompt: "dolphin swimming in the red ocean"
 }
 
@@ -106,6 +112,8 @@ export const textToImage = {
   controlScale: null,
   style: "",
   isGenerating: false,
+  promptStrength: null,
+  useExpansion: true,
   prompt: "cinematic still of a shiba inu, fluffy neck, wearing a suit of ornate metal armor"
 }
 
@@ -124,6 +132,8 @@ export const personalize = {
   controlScale: 0.8,
   style: "",
   isGenerating: false,
+  promptStrength: null,
+  useExpansion: true,
   prompt: "Studio Ghibli, soft colors, whimsical style, hand-drawn, highly detailed"
 }
 
@@ -142,6 +152,8 @@ export const imageToImage = {
   controlScale: null,
   style: "",
   isGenerating: false,
+  promptStrength: 0.8,
+  useExpansion: true,
   prompt: "cinematic still of a shiba inu, fluffy neck, wearing a suit of ornate metal armor"
 }
 

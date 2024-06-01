@@ -44,7 +44,7 @@ export default function Output({ settings }) {
 
   return (
     <div className="flex justify-center items-center w-full">
-      <div className="relative w-[100%] max-h-[95vh] overflow-y-auto">
+      <div className="relative w-[100%] max-h-[95vh]">
         {isGenerating && (
           <div className="flex flex-col items-center justify-center">
             <span className="loading loading-dots loading-md"></span>
@@ -57,16 +57,14 @@ export default function Output({ settings }) {
               <div className="w-full">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-5">
                   {generatedImage.map((image, index) => (
-                    <div key={index} className="relative group">
+                    <div key={index} className="lg:w-[300px] lg:h-[300px] xl:w-[400px] xl:h-[400px] monitor:h-[450px] relative group" style={{ marginLeft: "auto", marginRight: "auto" }}>
                       <Image
                         src={image}
                         alt={`Image ${index}`}
-                        layout="responsive"
                         width={200}
-                        height={100}
-                        sizes="100vw"
+                        height={200}
+                        className="cursor-pointer object-cover w-full h-full"
                         onClick={() => handleZoom(image)}
-                        className="cursor-pointer"
                       />
                       <motion.div
                         initial={{ opacity: 0 }}

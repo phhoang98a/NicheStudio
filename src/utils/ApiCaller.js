@@ -117,7 +117,7 @@ export const generatePersonalize = async (settings, setSettings) => {
   updateSettings("generatedImage", [])
   updateSettings("status", "")
 
-  const { prompt, seed, model, image, poseImage, ipScale, controlScale, negativePrompt } = settings;
+  const { prompt, seed, model, image, poseImage, ipScale, controlScale, negativePrompt, useExpansion } = settings;
   const [width, height] = modelConfig[model]["ratio_size"]["1:1"];
   const numInferenceSteps = modelConfig[model]["num_inference_steps"]
   const guidanceScale = modelConfig[model]["guidance_scale"]
@@ -142,7 +142,7 @@ export const generatePersonalize = async (settings, setSettings) => {
       "ip_adapter_scale": parseFloat(ipScale),
       "kps_conditional_image": base64PoseImage,
       "clip_skip": 2,
-      "use_expansion": true,
+      "use_expansion": useExpansion,
     },
   }
   await generateImages(data, setSettings);
@@ -161,7 +161,7 @@ export const generateImageToImage = async (settings, setSettings) => {
   updateSettings("generatedImage", [])
   updateSettings("status", "")
 
-  const { prompt, seed, model, image, negativePrompt } = settings;
+  const { prompt, seed, model, image, negativePrompt, promptStrength, useExpansion } = settings;
   const [width, height] = modelConfig[model]["ratio_size"]["1:1"];
   const guidanceScale = modelConfig[model]["guidance_scale"]
   const base64Image = image.base64String.split(",")[1]
@@ -183,8 +183,8 @@ export const generateImageToImage = async (settings, setSettings) => {
       "ip_adapter_scale": parseFloat(1.0),
       "kps_conditional_image": "",
       "clip_skip": 2,
-      "use_expansion": true,
-      "strength": parseFloat(0.9)
+      "use_expansion": useExpansion,
+      "strength": parseFloat(promptStrength)
     },
   }
 
@@ -204,7 +204,7 @@ export const generateTextToImage = async (settings, setSettings) => {
   updateSettings("generatedImage", [])
   updateSettings("status", "")
 
-  const { prompt, seed, model, ratio, negativePrompt } = settings;
+  const { prompt, seed, model, ratio, negativePrompt, useExpansion } = settings;
   const [width, height] = modelConfig[model]["ratio_size"][ratio.toLowerCase()];
   const numInferenceSteps = modelConfig[model]["num_inference_steps"]
   const guidanceScale = modelConfig[model]["guidance_scale"]
@@ -227,7 +227,7 @@ export const generateTextToImage = async (settings, setSettings) => {
       "ip_adapter_scale": parseFloat(1.0),
       "kps_conditional_image": "",
       "clip_skip": 2,
-      "use_expansion": true,
+      "use_expansion": useExpansion,
     },
   }
 
@@ -247,7 +247,7 @@ export const generateStickerMaker = async (settings, setSettings) => {
   updateSettings("generatedImage", [])
   updateSettings("status", "")
 
-  const { prompt, seed } = settings;
+  const { prompt, seed, useExpansion } = settings;
   const data = {
     "key": API_TOKEN,
     "prompt": prompt,
@@ -255,7 +255,9 @@ export const generateStickerMaker = async (settings, setSettings) => {
     "seed": parseInt(seed),
     "miner_uid": parseInt(-1),
     "pipeline_type": "txt2img",
-    "pipeline_params": {},
+    "pipeline_params": {
+      "use_expansion": useExpansion,
+    },
   }
   await generateImages(data, setSettings);
   updateSettings("isGenerating", false);
@@ -273,7 +275,7 @@ export const generateFaceToMany = async (settings, setSettings) => {
   updateSettings("generatedImage", [])
   updateSettings("status", "")
 
-  const { prompt, image, style, seed } = settings;
+  const { prompt, image, style, seed,useExpansion } = settings;
   const base64Image = image.base64String.split(",")[1]
   const data = {
     "key": API_TOKEN,
@@ -283,7 +285,10 @@ export const generateFaceToMany = async (settings, setSettings) => {
     "miner_uid": parseInt(-1),
     "pipeline_type": "img2img",
     "conditional_image": base64Image,
-    "pipeline_params": { "style": style },
+    "pipeline_params": { 
+      "style": style,
+      "use_expansion": useExpansion,
+    },
   }
 
   await generateImages(data, setSettings);
@@ -305,12 +310,15 @@ export const generateGoJourney = async (settings, setSettings) => {
   updateSettings("generatedImage", [])
   updateSettings("status", "")
 
-  const { prompt, seed } = settings;
+  const { prompt, seed, useExpansion } = settings;
   const data = {
     "key": API_TOKEN,
     "prompt": prompt,
     "model_name": "GoJourney",
     "seed": parseInt(seed)>=0?parseInt(seed):getRandomInt(0, 1e9),
+    "pipeline_params": {
+      "use_expansion": useExpansion,
+    },
   }
 
   let output = await fetch("/api/generate", {
