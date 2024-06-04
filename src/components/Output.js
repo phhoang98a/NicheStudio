@@ -43,8 +43,8 @@ export default function Output({ settings }) {
   };
 
   return (
-    <div className="flex justify-center items-center w-full overflow-y-auto xl:overflow-y-hidden ">
-      <div className="relative max-h-[95vh]">
+    <div className="flex justify-center items-center w-full overflow-y-auto custom-scroll xl:overflow-y-hidden ">
+      <div className=" relative max-h-[98vh] max-w-[98%]">
         {isGenerating && (
           <div className="flex flex-col items-center justify-center pb-1">
             <span className="loading loading-dots loading-md"></span>
@@ -57,7 +57,7 @@ export default function Output({ settings }) {
               <div className="w-full">
                 <div className={`grid grid-cols-1 ${ ratio=="9:16" ? 'md:grid-cols-4' : 'md:grid-cols-2'} gap-4`}>
                   {generatedImage.map((image, index) => (
-                    <div key={index} className=" relative group w-full xl:w-auto xl:h-[400px] monitor:h-[450px]" style={{ marginLeft: "auto", marginRight: "auto" }}>
+                    <div key={index} className=" relative group w-full xl:w-auto xl:h-[350px] monitor:h-[380px]" style={{ marginLeft: "auto", marginRight: "auto" }}>
                       <Image
                         src={image}
                         alt={`Image ${index}`}

@@ -6,10 +6,17 @@ import { ratios, styles, goJourney, faceToMany, stickerMaker, textToImage, perso
 import { AiOutlineClose } from "react-icons/ai";
 import { generateFaceToMany, generateGoJourney, generateStickerMaker, generateTextToImage, generatePersonalize, generateImageToImage } from "@/utils/ApiCaller";
 
-const Advanced = ({ uid, secretKey, seed, updateSettings }) => {
+const Advanced = ({ uid, secretKey, seed, updateSettings, checkHeight }) => {
+
+  const activeCheckHeight = ()=>{
+    setTimeout(() => {
+      checkHeight();
+    }, 100);
+  }
+
   return (
-    <Accordion variant="splitted">
-      <AccordionItem key="1" aria-label="Advanced" title={<span className="text-sm">Advanced</span>}>
+    <Accordion >
+      <AccordionItem onPress={activeCheckHeight} key="1" aria-label="Advanced"  title={<span className="text-sm">Advanced</span>}>
         <div className="flex flex-col gap-4">
           <Textarea
             label="Specify an UID"
@@ -102,7 +109,7 @@ const ImageUpload = ({ image, title, attribute, updateSettings }) => {
         <Card
           onDrop={handleDrop}
           onDragOver={handleDragOver}
-          className="border-dashed border-2 border-gray-300 p-6 text-center"
+          className="border-dashed border-2 border-gray-300 text-center"
         >
           <div className="flex flex-col items-center justify-center h-40">
             <div className="text-4xl cursor-pointer" onClick={triggerFileSelect}>+</div>
@@ -230,7 +237,7 @@ const PromptEnhancement = ({ useExpansion, updateSettings }) => {
   )
 }
 
-export default function Input({ feature, settings, setSettings, setFirstGen }) {
+export default function Input({ feature, settings, setSettings, setFirstGen, checkHeight }) {
   const { model, ratio, negativePrompt, uid, secretKey, seed, poseImage, image, ipScale, promptStrength, controlScale, style, isGenerating, status, prompt, useExpansion } = settings;
   const [error, setError] = useState("")
 
@@ -322,7 +329,8 @@ export default function Input({ feature, settings, setSettings, setFirstGen }) {
 
 
   return (
-    <Card className="overflow-y-auto max-h-[60vh]">
+
+    <Card >
       <CardBody >
         <div className="flex flex-col gap-4">
           {
@@ -360,7 +368,7 @@ export default function Input({ feature, settings, setSettings, setFirstGen }) {
             (feature == "textToImage" || feature == "personalize" || feature == "imageToImage") &&
             <NegativePrompt negativePrompt={negativePrompt} updateSettings={updateSettings} />
           }
-          <Advanced uid={uid} secretKey={secretKey} seed={seed} updateSettings={updateSettings} />
+          <Advanced uid={uid} secretKey={secretKey} seed={seed} updateSettings={updateSettings} checkHeight={checkHeight}/>
           <Button className="bg-black transition duration-150 ease-in-out text-white" isDisabled={isGenerating} onClick={generate}>
             Generate
           </Button>
@@ -381,5 +389,6 @@ export default function Input({ feature, settings, setSettings, setFirstGen }) {
         </div>
       </CardBody>
     </Card>
+
   )
 }

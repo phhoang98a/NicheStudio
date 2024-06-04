@@ -1,5 +1,5 @@
 "use client"
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Select, SelectItem } from "@nextui-org/react";
 import { features } from "./data";
 import Input from "@/components/Input";
@@ -9,7 +9,7 @@ import Image from "next/image";
 
 
 const Feature = ({ feature, setFeature, settings, setFirstGen }) => {
-  const {isGenerating} = settings
+  const { isGenerating } = settings
   return (
     <Select
       isDisabled={isGenerating}
@@ -33,28 +33,38 @@ export default function Home() {
   const [firstGen, setFirstGen] = useState(true)
   const [feature, setFeature] = useState("textToImage")
   const [settings, setSettings] = useState(textToImage)
+  const divRef = useRef(null);
+
+  const checkHeight = ()=>{
+    const div = divRef.current;
+    if (div) {
+      const hasOverflow = div.scrollHeight > div.clientHeight;
+      div.classList.toggle('md:justify-start', hasOverflow);
+      div.classList.toggle('md:justify-center', !hasOverflow);
+    }
+  }
+
+  useEffect(() => {
+    checkHeight()
+  }, [feature,settings]);
 
   return (
-    <div className="flex justify-center items-center ">
-      <div className={`w-full grid grid-cols-1 ${!firstGen ? 'md:grid-cols-3 md:grid-flow-col' : 'md:grid-cols-1'} gap-2 md:gap-0`}>
-        <div className="flex flex-col justify-center items-center col-span-1 relative h-screen">
-          <div className="w-[95%] md:w-[250px] custom:w-[270px] lg:w-[330px] xl:w-[420px] mt-3">
+    <div className="flex h-screen  justify-center items-center">
+      <div className={`w-full h-full overflow-y-auto custom-scroll md:overflow-y-hidden  md:w-auto grid grid-cols-1  ${!firstGen ? 'md:grid-cols-3 md:grid-flow-col' : 'md:grid-cols-1'}`}>
+        <div 
+          className={`flex flex-col h-full items-center md:overflow-y-auto custom-scroll  col-span-1 mt-3`}
+          ref={divRef}
+        >
+          
+          <div className="w-[95%] md:w-[250px] custom:w-[270px] lg:w-[330px] xl:w-[420px]">
             <Feature feature={feature} setFeature={setFeature} settings={settings} setFirstGen={setFirstGen} />
           </div>
           <div className="w-[95%] md:w-[250px] custom:w-[270px] lg:w-[330px] xl:w-[420px] mt-2 mb-2 md:mt-12">
-            <Input feature={feature} settings={settings} setSettings={setSettings} setFirstGen={setFirstGen} />
+            <Input feature={feature} settings={settings} setSettings={setSettings} setFirstGen={setFirstGen} checkHeight={checkHeight}/>
           </div>
-          <Image
-            src="/Logo.svg"
-            alt="Logo"
-            width={150}
-            height={150}
-            sizes="100vw"
-            className="hidden md:block absolute bottom-0 left-0 m-6 hide-on-small-height"
-          />
         </div>
         {!firstGen &&
-          <div className="flex justify-center items-center col-span-2">
+          <div className="flex mt-3 col-span-2">
             <Output settings={settings} />
           </div>
         }
