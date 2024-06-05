@@ -43,7 +43,7 @@ export default function Output({ settings }) {
   };
 
   return (
-    <div className="flex justify-center items-center w-full overflow-y-auto custom-scroll xl:overflow-y-hidden ">
+    <div className="flex justify-center items-center w-full  custom-scroll xl:overflow-y-hidden ">
       <div className=" relative max-h-[98vh] max-w-[98%]">
         {isGenerating && (
           <div className="flex flex-col items-center justify-center pb-1">
