@@ -1,6 +1,7 @@
 import { Poppins } from "next/font/google";
 import { NextUIProvider } from '@nextui-org/react'
 import "./globals.css";
+import Favicon from '../../public/favicon.ico';
 
 const poppins = Poppins({
   weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
@@ -10,6 +11,7 @@ const poppins = Poppins({
 export const metadata = {
   title: "NicheTensor Studio",
   description: "NicheTensor Studio",
+  icons: [{ rel: 'icon', url: Favicon.src }],
 };
 
 export default function RootLayout({ children }) {
