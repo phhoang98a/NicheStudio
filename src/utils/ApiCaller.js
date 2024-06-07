@@ -1,6 +1,6 @@
 import {modelConfig} from "../app/data"
 
-const API_TOKEN = "capricorn_feb"
+const API_TOKEN = process.env.NEXT_PUBLIC_API_TOKEN;
 
 const fetchGoJourney = async (taskId) => {
   const data = {
@@ -208,7 +208,6 @@ export const generateTextToImage = async (settings, setSettings) => {
   const [width, height] = modelConfig[model]["ratio_size"][ratio.toLowerCase()];
   const numInferenceSteps = modelConfig[model]["num_inference_steps"]
   const guidanceScale = modelConfig[model]["guidance_scale"]
-
 
   const data = {
     "key": API_TOKEN,
