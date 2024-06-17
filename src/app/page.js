@@ -13,10 +13,9 @@ const Feature = ({ feature, setFeature, settings, setFirstGen }) => {
   return (
     <Select
       isDisabled={isGenerating}
-      label="Feature"
       placeholder="Select a feature"
       selectedKeys={[feature]}
-      style={{ backgroundColor: "white" }}
+      style={{ backgroundColor: "white", borderRadius:"100px", paddingTop:"25px", paddingBottom:"25px" }}
       onSelectionChange={(keys) => { if (keys.currentKey) setFeature(keys.currentKey); setFirstGen(true); }}
     >
       {features.map((feature) => (
