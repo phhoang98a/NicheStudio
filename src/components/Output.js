@@ -44,7 +44,7 @@ export default function Output({ settings }) {
 
   return (
     <div className="flex justify-center items-center w-full  custom-scroll md:overflow-y-auto ">
-      <div className=" relative max-h-[98vh] max-w-[98%]">
+      <div className=" relative max-w-[98%]">
         {isGenerating && (
           <div className="flex flex-col items-center justify-center pb-1">
             <span className="loading loading-dots loading-md"></span>

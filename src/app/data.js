@@ -5,6 +5,7 @@ export const features = [
   { key: "personalize", label: "Personalize" },
   { key: "imageToImage", label: "Image To Image" },
   { key: "goJourney", label: "GoJourney" },
+  { key: "chatCompletions", label: "Chat Completions" },
 ];
 
 export const styles = [
