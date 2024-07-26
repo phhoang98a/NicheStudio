@@ -56,3 +56,17 @@ body {
 .start-aligned {
   justify-content: flex-start;
 }
+
+.ellipsis {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  white-space: normal;
+  overflow: hidden;
+}
+
+.chat-input:empty::before {
+  content: "Say anything...";
+  color: #000b;
+  pointer-events: none;
+}

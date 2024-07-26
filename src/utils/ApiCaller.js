@@ -350,3 +350,21 @@ export const generateGoJourney = async (settings, setSettings) => {
     await new Promise(resolve => setTimeout(resolve, 2000));
   }
 }
+
+export const generateText = async (messages) => {
+  const data = {
+    model: "Llama3_70b",
+    messages,
+    max_tokens: 512,
+    temperature: 0.7,
+    top_p: 0.95,
+  };
+
+  const response = await fetch("/api/chat", {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+  const result = await response.json();
+
+  return result;
+};
