@@ -16,13 +16,16 @@ const ChatInput = ({ sending, messages, setSending, setMessages }) => {
 
     if (inputRef.current) inputRef.current.innerText = "";
 
-    setSending(true);
-
-    const newMessages = [...messages, { role: "user", content: message }];
-    setMessages(newMessages);
-    const result = await generateText(newMessages);
-    if (!!result.choices) {
-      setMessages([...newMessages, { role: "assistant", content: result.choices.at(0).text }]);
+    try {
+      setSending(true);
+      const newMessages = [...messages, { role: "user", content: message }];
+      setMessages(newMessages);
+      const result = await generateText(newMessages);
+      if (!!result.choices) {
+        setMessages([...newMessages, { role: "assistant", content: result.choices.at(0).text }]);
+      }
+    } catch (error) {
+      alert("Some thing went wrong, please try again!");
     }
     setSending(false);
   };
