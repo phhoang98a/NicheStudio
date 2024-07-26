@@ -2,7 +2,6 @@ import React, { useEffect, useRef } from "react";
 
 import { generateText } from "@/utils/ApiCaller";
 
-
 const ChatInput = ({ sending, messages, setSending, setMessages }) => {
   const inputRef = useRef(null);
 
@@ -22,7 +21,10 @@ const ChatInput = ({ sending, messages, setSending, setMessages }) => {
       setMessages(newMessages);
       const result = await generateText(newMessages);
       if (!!result.choices) {
-        setMessages([...newMessages, { role: "assistant", content: result.choices.at(0).text }]);
+        setMessages([
+          ...newMessages,
+          { role: "assistant", content: result.choices.at(0).text },
+        ]);
       }
     } catch (error) {
       alert("Some thing went wrong, please try again!");
