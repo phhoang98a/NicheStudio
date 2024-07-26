@@ -7,6 +7,7 @@ const Message = ({ role, content }) => (
     <img
       className="w-12 h-12 rounded-full"
       src={role === "user" ? "user.svg" : "assistant.svg"}
+      alt="avatar"
     />
     <div
       className={clsx(
