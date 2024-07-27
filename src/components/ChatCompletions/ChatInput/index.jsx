@@ -1,8 +1,9 @@
 import React, { useEffect, useRef } from "react";
 
 import { generateText } from "@/utils/ApiCaller";
+import ModelSelect from "../ModelSelect";
 
-const ChatInput = ({ sending, messages, setSending, setMessages }) => {
+const ChatInput = ({ sending, conversation, setSending, updateModel, setMessages }) => {
   const inputRef = useRef(null);
 
   const handleSendMessageClicked = async () => {
@@ -17,9 +18,9 @@ const ChatInput = ({ sending, messages, setSending, setMessages }) => {
 
     try {
       setSending(true);
-      const newMessages = [...messages, { role: "user", content: message }];
+      const newMessages = [...conversation.messages, { role: "user", content: message }];
       setMessages(newMessages);
-      const result = await generateText(newMessages);
+      const result = await generateText(newMessages, conversation.model);
       if (!!result.choices) {
         setMessages([
           ...newMessages,
@@ -27,6 +28,7 @@ const ChatInput = ({ sending, messages, setSending, setMessages }) => {
         ]);
       }
     } catch (error) {
+      console.log(error);
       alert("Some thing went wrong, please try again!");
     }
     setSending(false);
@@ -48,7 +50,8 @@ const ChatInput = ({ sending, messages, setSending, setMessages }) => {
   }, [sending]);
 
   return (
-    <div className="w-full">
+    <div className="w-full flex gap-4">
+      <ModelSelect model={conversation.model} disabled={!!conversation.messages.length} onSelect={updateModel} />
       {sending ? (
         <p className="w-full h-12 px-3 py-2.5 flex justify-center rounded-3xl border-2 bg-gray-200 border-blue-700 outline-none transition">
           <span className="loading loading-dots loading-md" />

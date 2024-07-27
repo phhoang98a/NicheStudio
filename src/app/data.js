@@ -202,3 +202,5 @@ export const modelConfig = {
       "ratio_size": sdxlRatioToSize
   },
 }
+
+export const chatModels = ["Gemma7b", "Llama3_70b"];
