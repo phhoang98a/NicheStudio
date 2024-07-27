@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import { Select, SelectItem } from "@nextui-org/react";
 import clsx from "clsx";
 
-import { features } from "./data";
+import { chatModels, features } from "./data";
 import Input from "@/components/Input";
 import { textToImage } from "./data";
 import Output from "@/components/Output";
@@ -45,7 +45,12 @@ export default function Home() {
   const [firstGen, setFirstGen] = useState(true);
   const [feature, setFeature] = useState("textToImage");
   const [settings, setSettings] = useState(textToImage);
-  const [conversations, setConversations] = useState([[]]);
+  const [conversations, setConversations] = useState([
+    {
+      model: chatModels.at(0),
+      messages: [],
+    },
+  ]);
   const [currentConversationIndex, setCurrentConversationIndex] = useState(0);
   const divRef = useRef(null);
 
@@ -61,25 +66,60 @@ export default function Home() {
     }
   };
 
+  const saveToStorage = (result) => {
+    const jsonString = JSON.stringify(result);
+    localStorage.setItem("conversations", jsonString);
+
+    return result;
+  };
+
   const changeConversation = (index) => setCurrentConversationIndex(index);
   const deleteConversation = (index) =>
-    setConversations((prev) => prev.filter((_, i) => i !== index));
+    setConversations((prev) =>
+      saveToStorage(prev.filter((_, i) => i !== index)),
+    );
   const createNewConversation = () => {
     const newConversations = [
-      ...conversations.filter((conversation) => conversation.length > 0),
-      [],
+      ...conversations.filter(({ messages }) => messages.length > 0),
+      {
+        model: chatModels.at(0),
+        messages: [],
+      },
     ];
+
+    saveToStorage(newConversations);
     setConversations(newConversations);
     setCurrentConversationIndex(newConversations.length - 1);
   };
 
-  const setMessages = (messages) => {
+  const updateModel = (model) =>
     setConversations((prev) =>
-      prev.map((conversation, index) =>
-        index === currentConversationIndex ? messages : conversation,
+      saveToStorage(
+        prev.map((c, i) =>
+          i === currentConversationIndex ? { ...c, model } : c,
+        ),
       ),
     );
+
+  const setMessages = (messages) => {
+    setConversations((prev) => {
+      const result = prev.map((conversation, index) =>
+        index === currentConversationIndex
+          ? { ...conversation, messages }
+          : conversation,
+      );
+      saveToStorage(result);
+
+      return result;
+    });
   };
+
+  useEffect(() => {
+    const conversationsFromStorage = localStorage.getItem("conversations");
+    if (!conversationsFromStorage) return;
+    const conversations = JSON.parse(conversationsFromStorage);
+    setConversations(conversations);
+  }, []);
 
   useEffect(() => {
     checkHeight();
@@ -134,12 +174,13 @@ export default function Home() {
         )}
       </div>
       {isChatCompletions ? (
-        <div className="w-[95%] md:w-[250px] custom:w-[270px] lg:w-[330px] xl:w-[420px] h-full max-h-[calc(100dvh-62px)] mx-auto pt-6 pb-4 md:pb-8 flex flex-col justify-between gap-6">
-          <MessageList messages={currentConversation} />
+        <div className="w-full max-w-[600px] px-4 h-full max-h-[calc(100dvh-62px)] mx-auto pt-6 pb-4 md:pb-8 flex flex-col justify-between gap-6">
+          <MessageList messages={currentConversation?.messages} />
           <InteractBar
             createNewConversation={createNewConversation}
-            messages={currentConversation}
+            conversation={currentConversation}
             setMessages={setMessages}
+            updateModel={updateModel}
           />
         </div>
       ) : (

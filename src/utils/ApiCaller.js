@@ -351,9 +351,9 @@ export const generateGoJourney = async (settings, setSettings) => {
   }
 }
 
-export const generateText = async (messages) => {
+export const generateText = async (messages, model) => {
   const data = {
-    model: "Llama3_70b",
+    model,
     messages,
     max_tokens: 512,
     temperature: 0.7,

@@ -7,7 +7,7 @@ const MessageList = ({ messages }) => {
 
   useEffect(() => {
     listRef.current.scrollTo(0, listRef.current.scrollHeight);
-  }, [messages.length])
+  }, [messages?.length])
 
 
   return (
