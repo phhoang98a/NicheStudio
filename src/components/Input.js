@@ -374,7 +374,7 @@ export default function Input({ feature, settings, setSettings, setFirstGen, che
             ["textToImage", "personalize", "imageToImage"].includes(feature) &&
             <NegativePrompt negativePrompt={negativePrompt} updateSettings={updateSettings} />
           }
-          <Advanced uid={uid} secretKey={secretKey} seed={seed} updateSettings={updateSettings} checkHeight={checkHeight}/>
+          {/* <Advanced uid={uid} secretKey={secretKey} seed={seed} updateSettings={updateSettings} checkHeight={checkHeight}/> */}
           <Button className="transition duration-150 ease-in-out text-white" style={{background: "rgba(0, 26, 255, 1)", borderRadius:"20px"}} isDisabled={isGenerating} onClick={generate}>
             Generate
           </Button>
