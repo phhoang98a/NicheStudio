@@ -163,6 +163,7 @@ export const imageToImage = {
 }
 
 export const imageUpscaling = {
+  model: "dreamShaperXL",
   ratio: "",
   uid: "-1",
   secretKey: "",
