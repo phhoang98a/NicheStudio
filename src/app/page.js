@@ -186,7 +186,10 @@ export default function Home() {
       ) : (
         !firstGen && (
           <div className="flex mt-3 col-span-2">
-            <Output settings={settings} />
+            <Output
+              settings={settings}
+              singleResult={feature === "imageUpscaling"}
+            />
           </div>
         )
       )}

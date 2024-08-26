@@ -106,41 +106,30 @@ const generateImages = async (data, setSettings) => {
 }
 
 const upscaleImage = async (data, setSettings) => {
-  const promises = [];
-  for (let i = 0; i <= 3; i++) {
-    let newData = { ...data }
-    if (data["seed"]>=0)
-      newData["seed"] = newData["seed"] + i
-    else
-      newData["seed"] = getRandomInt(0, 1e9);
-    promises.push(
-      fetch("/api/upscale", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newData),
-      }).then(response => response.json())
-        .then(result => {
-          let newImage = "/default.avif"
-          if ("image" in result && result["image"]!="")
-            newImage = `data:image/png;base64,${result?.image}`;
-          setSettings(prevSettings => ({
-            ...prevSettings,
-            generatedImage: [
-              ...(prevSettings.generatedImage ?? []),
-              newImage,
-            ],
-          }));
-        })
-        .catch(error => {
-          console.error("Request failed: ", error);
-        })
-    );
-  }
-  await Promise.allSettled(promises);
-
-}
+  let newData = { ...data };
+  if (data["seed"] >= 0) newData["seed"] = newData["seed"];
+  else newData["seed"] = getRandomInt(0, 1e9);
+  await fetch("/api/upscale", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(newData),
+  })
+    .then((response) => response.json())
+    .then((result) => {
+      let newImage = "/default.avif";
+      if ("image" in result && result["image"] != "")
+        newImage = `data:image/png;base64,${result?.image}`;
+      setSettings((prevSettings) => ({
+        ...prevSettings,
+        generatedImage: [...(prevSettings.generatedImage ?? []), newImage],
+      }));
+    })
+    .catch((error) => {
+      console.error("Request failed: ", error);
+    });
+};
 
 export const generatePersonalize = async (settings, setSettings) => {
   const updateSettings = (attribute, value) => {
