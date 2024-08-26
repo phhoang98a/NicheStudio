@@ -4,6 +4,7 @@ export const features = [
   { key: "stickerMaker", label: "StickerMaker" },
   { key: "personalize", label: "Personalize" },
   { key: "imageToImage", label: "Image To Image" },
+  { key: "imageUpscaling", label: "Image Upscaling" },
   { key: "goJourney", label: "GoJourney" },
   { key: "chatCompletions", label: "Chat Completions" },
 ];
@@ -145,6 +146,25 @@ export const imageToImage = {
   model: "dreamShaperXL",
   ratio: "",
   negativePrompt: "low quality, blurry, pixelated, noisy, low resolution, defocused, out of focus, overexposed, bad image, nsfw",
+  uid: "-1",
+  secretKey: "",
+  seed: "-1",
+  poseImage: "",
+  image: null,
+  generatedImage: [],
+  status: "",
+  ipScale: null,
+  controlScale: null,
+  style: "",
+  isGenerating: false,
+  promptStrength: 0.8,
+  useExpansion: true,
+  prompt: "cinematic still of a shiba inu, fluffy neck, wearing a suit of ornate metal armor"
+}
+
+export const imageUpscaling = {
+  model: "dreamShaperXL",
+  ratio: "",
   uid: "-1",
   secretKey: "",
   seed: "-1",
