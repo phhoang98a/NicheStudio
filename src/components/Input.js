@@ -343,7 +343,7 @@ export default function Input({ feature, settings, setSettings, setFirstGen, che
             feature == "textToImage" && <Models models={modelsT2I} model={model} updateSettings={updateSettings} />
           }
           {
-            ["personalize", "imageToImage", "imageUpscaling"].includes(feature) && <Models models={models} model={model} updateSettings={updateSettings} />
+            ["personalize", "imageToImage"].includes(feature) && <Models models={models} model={model} updateSettings={updateSettings} />
           }
           <Prompt prompt={prompt} updateSettings={updateSettings} />
           {(feature !== "goJourney") && <PromptEnhancement useExpansion={useExpansion} updateSettings={updateSettings} />}
