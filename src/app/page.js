@@ -97,6 +97,7 @@ export default function Home() {
     },
   ]);
   const [currentConversationIndex, setCurrentConversationIndex] = useState(0);
+  const [storage, setStorage] = useState({});
   const divRef = useRef(null);
 
   const isChatCompletions = feature === "chatCompletions";
@@ -164,6 +165,7 @@ export default function Home() {
     if (!conversationsFromStorage) return;
     const conversations = JSON.parse(conversationsFromStorage);
     setConversations(conversations);
+    setStorage(JSON.parse(localStorage.getItem("settings")) || {});
   }, []);
 
   useEffect(() => {
@@ -214,6 +216,7 @@ export default function Home() {
               settings={settings}
               setSettings={setSettings}
               setFirstGen={setFirstGen}
+              setStorage={setStorage}
               checkHeight={checkHeight}
             />
           </div>
@@ -248,10 +251,11 @@ export default function Home() {
         )}
       />
       <PreviousGenerations
-        isDoneGenerated={!settings.isGenerating}
+        storage={storage}
         setFeature={setFeature}
         setSettings={setSettings}
         setFirstGen={setFirstGen}
+        setStorage={setStorage}
       />
     </div>
   );

@@ -1,18 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import { FaAnglesRight } from "react-icons/fa6";
 import { AiOutlineClose } from "react-icons/ai";
 import clsx from "clsx";
 
-const PreviousGenerations = ({ isDoneGenerated, setFeature, setSettings, setFirstGen }) => {
+const PreviousGenerations = ({ storage, setFeature, setSettings, setFirstGen, setStorage }) => {
 	const [isReveal, setIsReveal] = useState(false);
-	const [storage, setStorage] = useState({});
-
-	useEffect(() => {
-		setStorage(JSON.parse(localStorage.getItem("settings")) || {})
-	}, [isDoneGenerated]);
 
 	const handleSelect = (key, value) => {
 		const feature = key.split("_").at(0);

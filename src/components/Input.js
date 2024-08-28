@@ -6,6 +6,9 @@ import { ratios, styles, modelsT2I, models } from "../app/data";
 import { AiOutlineClose } from "react-icons/ai";
 import { generateFaceToMany, generateGoJourney, generateStickerMaker, generateTextToImage, generatePersonalize, generateImageToImage, generateImageUpscaling } from "@/utils/ApiCaller";
 
+const DEFAULT_IMAGE = "/default.avif";
+const MAX_STORAGE = 2;
+
 const Advanced = ({ uid, secretKey, seed, updateSettings, checkHeight }) => {
 
   const activeCheckHeight = ()=>{
@@ -236,31 +239,13 @@ const PromptEnhancement = ({ useExpansion, updateSettings }) => {
   )
 }
 
-export default function Input({ feature, settings, setSettings, setFirstGen, checkHeight }) {
+export default function Input({ feature, settings, setSettings, setFirstGen, setStorage, checkHeight }) {
   const { model, ratio, negativePrompt, uid, secretKey, seed, poseImage, image, ipScale, promptStrength, controlScale, style, isGenerating, status, prompt, useExpansion } = settings;
   const [error, setError] = useState("")
 
   useEffect(() => {
     if (!settings.isGenerating && settings.generatedImage.length > 0) {
       saveNewSettingToLocalStorage(settings);
-      // const storageSettings = getLocalStorageSettings();
-
-      // if (Object.keys(storageSettings).length === 0) return 
-        
-      // const foundSettings = Object.entries(storageSettings).find(([key, value]) => {
-      //   const { generatedImage, isGenerating, ...rest } = value;
-      //   const { generatedImage: settingsGeneratedImage, isGenerating: settingsIsGenerating, ...currentSettings } = settings;
-      //   return JSON.stringify(rest) === JSON.stringify(currentSettings);
-      // });
-
-      // if (!foundSettings) return saveNewSettingToLocalStorage(settings);
-
-      // const [key, value] = foundSettings;
-      // const updatedSettings = {
-      //   ...storageSettings,
-      //   [key]: { ...value, generatedImage: settings.generatedImage },
-      // };
-      // localStorage.setItem("settings", JSON.stringify(updatedSettings));
     }
   }, [settings.isGenerating]);
 
@@ -332,11 +317,44 @@ export default function Input({ feature, settings, setSettings, setFirstGen, che
     setError("")
   }, [feature])
 
-  const saveNewSettingToLocalStorage = (setting) => {
+  const saveNewSettingToLocalStorage = async (setting) => {
     const settings = getLocalStorageSettings();
     const newKey = `${feature}_${Date.now()}`;
-    settings[newKey] = setting;
+
+    const processedImages = await Promise.all(
+      setting.generatedImage.map(async (img) => {
+        if (img === DEFAULT_IMAGE) return img;
+
+        const webpBase64 = await convertImage(img);
+        return webpBase64;
+      }),
+    );
+    settings[newKey] = { ...setting, generatedImage: processedImages };
+
+    if (Object.keys(settings).length > MAX_STORAGE) {
+      const lowestTime = Object.keys(settings).reduce((prev, current) => {
+        const value = current.split("_").at(-1);
+        return prev - value > 0 ? value : prev;
+      }, 10e12);
+
+      const oldestKey = Object.keys(settings).find((item) =>
+        item.includes(lowestTime),
+      );
+      delete settings[oldestKey];
+    }
+
+    setStorage(settings);
     localStorage.setItem("settings", JSON.stringify(settings));
+  };
+
+  const convertImage = async (base64Image) => {
+    const response = await fetch('/api/webp', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ imageBase64: base64Image }),
+    });
+    const data = await response.json();
+    return data.webpBase64;
   };
 
   const getLocalStorageSettings = () => JSON.parse(localStorage.getItem("settings")) || {};
