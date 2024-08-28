@@ -2,7 +2,7 @@
 import Image from "next/image";
 import { useEffect, useState, useCallback, useRef } from "react";
 import { Select, SelectItem, Card, CardBody, Textarea, Accordion, AccordionItem, Slider, Button, Checkbox } from "@nextui-org/react";
-import { ratios, styles, goJourney, faceToMany, stickerMaker, textToImage, personalize, imageToImage, imageUpscaling, modelsT2I, models } from "../app/data";
+import { ratios, styles, modelsT2I, models } from "../app/data";
 import { AiOutlineClose } from "react-icons/ai";
 import { generateFaceToMany, generateGoJourney, generateStickerMaker, generateTextToImage, generatePersonalize, generateImageToImage, generateImageUpscaling } from "@/utils/ApiCaller";
 
@@ -215,15 +215,14 @@ const Ratios = ({ ratio, isGenerating, updateSettings, setFirstGen }) => {
       placeholder="Select a ratio"
       selectedKeys={[ratio]}
       style={{ backgroundColor: "white" }}
-      onSelectionChange={(keys) => {
-        if (keys.currentKey)
-          updateSettings("ratio", keys.currentKey)
-        setFirstGen(true)
-        updateSettings("generatedImage", [])
-      }}
     >
       {ratios.map((rt) => (
-        <SelectItem key={rt.key} className="text-primary">
+        <SelectItem key={rt.key} className="text-primary" onClick={() => {
+          if (rt.key)
+            updateSettings("ratio", rt.key)
+          setFirstGen(true)
+          updateSettings("generatedImage", [])
+        }}>
           {rt.label}
         </SelectItem>
       ))}
@@ -241,6 +240,29 @@ export default function Input({ feature, settings, setSettings, setFirstGen, che
   const { model, ratio, negativePrompt, uid, secretKey, seed, poseImage, image, ipScale, promptStrength, controlScale, style, isGenerating, status, prompt, useExpansion } = settings;
   const [error, setError] = useState("")
 
+  useEffect(() => {
+    if (!settings.isGenerating && settings.generatedImage.length > 0) {
+      saveNewSettingToLocalStorage(settings);
+      // const storageSettings = getLocalStorageSettings();
+
+      // if (Object.keys(storageSettings).length === 0) return 
+        
+      // const foundSettings = Object.entries(storageSettings).find(([key, value]) => {
+      //   const { generatedImage, isGenerating, ...rest } = value;
+      //   const { generatedImage: settingsGeneratedImage, isGenerating: settingsIsGenerating, ...currentSettings } = settings;
+      //   return JSON.stringify(rest) === JSON.stringify(currentSettings);
+      // });
+
+      // if (!foundSettings) return saveNewSettingToLocalStorage(settings);
+
+      // const [key, value] = foundSettings;
+      // const updatedSettings = {
+      //   ...storageSettings,
+      //   [key]: { ...value, generatedImage: settings.generatedImage },
+      // };
+      // localStorage.setItem("settings", JSON.stringify(updatedSettings));
+    }
+  }, [settings.isGenerating]);
 
   const updateSettings = (attribute, value) => {
     setSettings((prevSettings) => ({
@@ -308,31 +330,16 @@ export default function Input({ feature, settings, setSettings, setFirstGen, che
 
   useEffect(() => {
     setError("")
-    switch (feature) {
-      case "goJourney":
-        setSettings(goJourney)
-        break;
-      case "faceToMany":
-        setSettings(faceToMany)
-        break;
-      case "stickerMaker":
-        setSettings(stickerMaker)
-        break;
-      case "textToImage":
-        setSettings(textToImage)
-        break;
-      case "personalize":
-        setSettings(personalize)
-        break;
-      case "imageToImage":
-        setSettings(imageToImage)
-        break;
-      case "imageUpscaling":
-        setSettings(imageUpscaling)
-        break;
-    }
   }, [feature])
 
+  const saveNewSettingToLocalStorage = (setting) => {
+    const settings = getLocalStorageSettings();
+    const newKey = `${feature}_${Date.now()}`;
+    settings[newKey] = setting;
+    localStorage.setItem("settings", JSON.stringify(settings));
+  };
+
+  const getLocalStorageSettings = () => JSON.parse(localStorage.getItem("settings")) || {};
 
   return (
 
