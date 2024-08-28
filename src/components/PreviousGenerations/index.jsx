@@ -1,16 +1,17 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { FaAnglesRight } from "react-icons/fa6";
 import clsx from "clsx";
 
 const PreviousGenerations = ({ isDoneGenerated, setFeature, setSettings, setFirstGen }) => {
 	const [isReveal, setIsReveal] = useState(false);
-	const storage = useMemo(
-		() => JSON.parse(localStorage.getItem("settings")) || {},
-		[isDoneGenerated],
-	);
+	const [storage, setStorage] = useState({});
+
+	useEffect(() => {
+		setStorage(JSON.parse(localStorage.getItem("settings")))
+	}, [isDoneGenerated]);
 
 	const handleSelect = (key, value) => {
 		const feature = key.split("_").at(0);
