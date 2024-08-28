@@ -40,12 +40,14 @@ const PreviousGenerations = ({ isDoneGenerated, setFeature, setSettings, setFirs
 					</button>
 				))}
 			</div>
-			<button
-				onClick={() => setIsReveal(!isReveal)}
-				className="absolute top-1/2 -translate-y-1/2 -right-10 w-10 h-10 bg-white rounded-r-2xl p-2 flex justify-center items-center"
-			>
-				<FaAnglesRight className={clsx("transition-all", isReveal ? "rotate-180" : "")} />
-			</button>
+			{Object.entries(storage).length > 0 &&
+				<button
+					onClick={() => setIsReveal(!isReveal)}
+					className="absolute top-1/2 -translate-y-1/2 -right-10 w-10 h-10 bg-white rounded-r-2xl p-2 flex justify-center items-center"
+				>
+					<FaAnglesRight className={clsx("transition-all", isReveal ? "rotate-180" : "")} />
+				</button>
+			}
 		</div>
 	);
 };
