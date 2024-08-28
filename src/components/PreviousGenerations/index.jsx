@@ -10,7 +10,7 @@ const PreviousGenerations = ({ isDoneGenerated, setFeature, setSettings, setFirs
 	const [storage, setStorage] = useState({});
 
 	useEffect(() => {
-		setStorage(JSON.parse(localStorage.getItem("settings")))
+		setStorage(JSON.parse(localStorage.getItem("settings")) || {})
 	}, [isDoneGenerated]);
 
 	const handleSelect = (key, value) => {
