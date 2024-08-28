@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { FaAnglesRight } from "react-icons/fa6";
+import { AiOutlineClose } from "react-icons/ai";
 import clsx from "clsx";
 
 const PreviousGenerations = ({ isDoneGenerated, setFeature, setSettings, setFirstGen }) => {
@@ -21,6 +22,13 @@ const PreviousGenerations = ({ isDoneGenerated, setFeature, setSettings, setFirs
 		setIsReveal(false);
 	}
 
+	const removeSetting = (key) => {
+		const newStorage = { ...storage };
+		delete newStorage[key];
+		setStorage(newStorage);
+		localStorage.setItem("settings", JSON.stringify(newStorage));
+	}
+
 	return (
 		<div
 			className={clsx(
@@ -31,12 +39,20 @@ const PreviousGenerations = ({ isDoneGenerated, setFeature, setSettings, setFirs
 			<div className="w-52 max-h-[400px] overflow-y-auto flex flex-col gap-3">
 				{Object.entries(storage).map(([key, value]) => (
 					<button key={key} onClick={() => handleSelect(key, value)}
-						className="flex-shrink-0 rounded-lg overflow-hidden"
+						className="flex-shrink-0 rounded-lg overflow-hidden relative"
 					>
 						<Image src={value.generatedImage.at(-1)} alt={key}
 							width={208}
 							height={208}
 							className="object-cover w-full aspect-square" />
+						<span onClick={(e) => {
+							e.stopPropagation();
+							removeSetting(key)
+						}}
+							className="absolute top-0 right-0 bg-white p-1 rounded-bl-lg cursor-pointer hover:bg-gray-100 transition-all"
+						>
+							<AiOutlineClose />
+						</span>
 					</button>
 				))}
 			</div>
