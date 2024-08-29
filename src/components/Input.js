@@ -330,7 +330,7 @@ export default function Input({ feature, settings, setSettings, setFirstGen, set
       }),
     );
 
-    const base64InputImage = setting.image.base64String
+    const base64InputImage = setting.image?.base64String
       ? await convertImage(setting.image.base64String)
       : setting.image.base64String;
     settings[newKey] = {
