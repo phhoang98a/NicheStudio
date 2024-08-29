@@ -7,7 +7,7 @@ import { AiOutlineClose } from "react-icons/ai";
 import { generateFaceToMany, generateGoJourney, generateStickerMaker, generateTextToImage, generatePersonalize, generateImageToImage, generateImageUpscaling } from "@/utils/ApiCaller";
 
 const DEFAULT_IMAGE = "/default.avif";
-const MAX_STORAGE = 2;
+const MAX_STORAGE = 5;
 
 const Advanced = ({ uid, secretKey, seed, updateSettings, checkHeight }) => {
 
@@ -331,6 +331,7 @@ export default function Input({ feature, settings, setSettings, setFirstGen, set
     );
     settings[newKey] = { ...setting, generatedImage: processedImages };
 
+    console.log(Object.keys(settings).length)
     if (Object.keys(settings).length > MAX_STORAGE) {
       const lowestTime = Object.keys(settings).reduce((prev, current) => {
         const value = current.split("_").at(-1);

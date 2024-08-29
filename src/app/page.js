@@ -161,11 +161,11 @@ export default function Home() {
   };
 
   useEffect(() => {
+    setStorage(JSON.parse(localStorage.getItem("settings")) || {});
     const conversationsFromStorage = localStorage.getItem("conversations");
     if (!conversationsFromStorage) return;
     const conversations = JSON.parse(conversationsFromStorage);
     setConversations(conversations);
-    setStorage(JSON.parse(localStorage.getItem("settings")) || {});
   }, []);
 
   useEffect(() => {
