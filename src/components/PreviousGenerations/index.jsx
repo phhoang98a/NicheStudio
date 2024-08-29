@@ -2,12 +2,12 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { FaAnglesRight } from "react-icons/fa6";
+import { FaAnglesLeft } from "react-icons/fa6";
 import { AiOutlineClose } from "react-icons/ai";
 import clsx from "clsx";
 
 const PreviousGenerations = ({ storage, isGenerating, setFeature, setSettings, setFirstGen, setStorage }) => {
-	const [isReveal, setIsReveal] = useState(false);
+	const [isReveal, setIsReveal] = useState(true);
 
 	const handleSelect = (key, value) => {
 		if (isGenerating) return;
@@ -28,11 +28,11 @@ const PreviousGenerations = ({ storage, isGenerating, setFeature, setSettings, s
 	return (
 		<div
 			className={clsx(
-				"fixed top-1/2 -translate-y-1/2 p-3 bg-white rounded-r-lg shadow transition-all z-50",
+				"fixed top-1/2 -translate-y-1/2 p-3 bg-white rounded-br-lg shadow transition-all z-50",
 				isReveal ? "left-0" : "-left-[232px]",
 			)}
 		>
-			<div className="w-52 max-h-[400px] overflow-y-auto flex flex-col gap-3">
+			<div className="w-52 min-h-[208px] max-h-[416px] overflow-y-auto flex flex-col gap-3">
 				{Object.entries(storage).map(([key, value]) => (
 					<button key={key} onClick={() => handleSelect(key, value)}
 						className="flex-shrink-0 rounded-lg overflow-hidden relative"
@@ -55,9 +55,10 @@ const PreviousGenerations = ({ storage, isGenerating, setFeature, setSettings, s
 			{Object.entries(storage).length > 0 &&
 				<button
 					onClick={() => setIsReveal(!isReveal)}
-					className="absolute top-1/2 -translate-y-1/2 -right-10 w-10 h-10 bg-white rounded-r-2xl p-2 flex justify-center items-center"
+					className={clsx("absolute bg-white rounded-t-2xl py-2 px-4 flex justify-center items-center -z-10", isReveal ? "w-full -top-10 right-1/2 translate-x-1/2" : "top-1/2 -translate-y-1/2  -right-[122px]  rotate-90")}
 				>
-					<FaAnglesRight className={clsx("transition-all", isReveal ? "rotate-180" : "")} />
+					<FaAnglesLeft className={clsx("mr-2 transition-all", isReveal ? "" : "rotate-90")} />
+					Recent Generation
 				</button>
 			}
 		</div>
