@@ -252,6 +252,7 @@ export default function Home() {
       />
       <PreviousGenerations
         storage={storage}
+        isGenerating={settings.isGenerating}
         setFeature={setFeature}
         setSettings={setSettings}
         setFirstGen={setFirstGen}

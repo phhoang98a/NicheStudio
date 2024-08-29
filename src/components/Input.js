@@ -329,7 +329,15 @@ export default function Input({ feature, settings, setSettings, setFirstGen, set
         return webpBase64;
       }),
     );
-    settings[newKey] = { ...setting, generatedImage: processedImages };
+
+    const base64InputImage = setting.image.base64String
+      ? await convertImage(setting.image.base64String)
+      : setting.image.base64String;
+    settings[newKey] = {
+      ...setting,
+      image: { ...setting.image, base64String: base64InputImage },
+      generatedImage: processedImages,
+    };
 
     console.log(Object.keys(settings).length)
     if (Object.keys(settings).length > MAX_STORAGE) {

@@ -6,10 +6,11 @@ import { FaAnglesRight } from "react-icons/fa6";
 import { AiOutlineClose } from "react-icons/ai";
 import clsx from "clsx";
 
-const PreviousGenerations = ({ storage, setFeature, setSettings, setFirstGen, setStorage }) => {
+const PreviousGenerations = ({ storage, isGenerating, setFeature, setSettings, setFirstGen, setStorage }) => {
 	const [isReveal, setIsReveal] = useState(false);
 
 	const handleSelect = (key, value) => {
+		if (isGenerating) return;
 		const feature = key.split("_").at(0);
 		setFeature(feature);
 		setSettings(value);
